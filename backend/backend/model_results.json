@@ -1,0 +1,9 @@
+{
+    "mae": 8.91159288585186e-09,
+    "rmse": 1.1170715903177537e-08,
+    "r2": 1.0,
+    "correlation_duration_variance": 0.7525720146832445,
+    "over_budget_percentage": 100.0,
+    "total_projects": 200,
+    "projects_over_budget": 200
+}

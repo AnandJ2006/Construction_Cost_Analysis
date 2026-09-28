@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Construction Cost Analytics</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">C</div>
+
+            <div>
+                <h2>ConstructIQ</h2>
+                <span>Cost Analytics</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a class="active">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a>
+                <span>▤</span>
+                Projects
+            </a>
+
+            <a>
+                <span>◉</span>
+                Cost Analysis
+            </a>
+
+            <a>
+                <span>◈</span>
+                Analytics
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="status">
+                <span class="status-dot"></span>
+                Data analysis active
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div>
+                <p class="small-title">
+                    INFRASTRUCTURE ANALYTICS
+                </p>
+
+                <h1>
+                    Construction Cost Dashboard
+                </h1>
+
+                <p class="subtitle">
+                    Monitor project budgets, cost variance and
+                    construction performance.
+                </p>
+            </div>
+
+            <div class="header-right">
+
+                <button class="refresh-btn"
+                        onclick="loadDashboard()">
+
+                    ↻ Refresh
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- FILTERS -->
+
+        <section class="filters">
+
+            <div class="filter-group">
+
+                <label>Location</label>
+
+                <select id="locationFilter"
+                        onchange="applyFilters()">
+
+                    <option value="All">
+                        All Locations
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label>Project Size</label>
+
+                <select id="sizeFilter"
+                        onchange="applyFilters()">
+
+                    <option value="All">
+                        All Sizes
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label>Budget Status</label>
+
+                <select id="budgetFilter"
+                        onchange="applyFilters()">
+
+                    <option value="All">
+                        All Projects
+                    </option>
+
+                    <option value="Over">
+                        Over Budget
+                    </option>
+
+                    <option value="Under">
+                        Under Budget
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- KPI CARDS -->
+
+        <section class="kpi-grid">
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon blue">
+                    #
+                </div>
+
+                <div>
+                    <p>Total Projects</p>
+                    <h2 id="totalProjects">0</h2>
+                    <span>Projects analyzed</span>
+                </div>
+
+            </div>
+
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon purple">
+                    ₹
+                </div>
+
+                <div>
+                    <p>Planned Cost</p>
+                    <h2 id="plannedCost">₹0</h2>
+                    <span>Budgeted cost</span>
+                </div>
+
+            </div>
+
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon orange">
+                    ₹
+                </div>
+
+                <div>
+                    <p>Actual Cost</p>
+                    <h2 id="actualCost">₹0</h2>
+                    <span>Total actual cost</span>
+                </div>
+
+            </div>
+
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon red">
+                    %
+                </div>
+
+                <div>
+                    <p>Cost Variance</p>
+                    <h2 id="variance">₹0</h2>
+                    <span id="variancePercent">0%</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CHART ROW 1 -->
+
+        <section class="chart-grid">
+
+            <div class="chart-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Planned vs Actual Cost</h3>
+
+                        <p>
+                            Overall construction cost comparison
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="costComparisonChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Cost Variance by Category</h3>
+
+                        <p>
+                            Identify major cost drivers
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="categoryChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CHART ROW 2 -->
+
+        <section class="chart-grid">
+
+            <div class="chart-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Duration vs Cost Variance
+                        </h3>
+
+                        <p>
+                            Relationship between project duration
+                            and cost overrun
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="durationChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Cost Variance by Location
+                        </h3>
+
+                        <p>
+                            Compare project performance by location
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="locationChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROJECT TABLE -->
+
+        <section class="table-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>Project Cost Details</h3>
+
+                    <p>
+                        Detailed project-level cost analysis
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Project ID</th>
+
+                            <th>Location</th>
+
+                            <th>Size</th>
+
+                            <th>Duration</th>
+
+                            <th>Planned Cost</th>
+
+                            <th>Actual Cost</th>
+
+                            <th>Variance</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="projectTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            Construction Cost Analytics
+            <span>•</span>
+            Data Science Project
+
+        </footer>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
